@@ -17,7 +17,7 @@ reversal_table = np.genfromtxt(reversal_table_file, delimiter=',')
 deletion_table = np.delete(np.delete(deletion_table, 0, axis=0), 0, axis=1)
 insertion_table = np.delete(np.delete(insertion_table, 0, axis=0), 0, axis=1)
 substitution_table = np.delete(np.delete(substitution_table, 0, axis=0), 0, axis=1)
-transposition_table = np.delete(np.delete(reversal_table, 0, axis=0), 0, axis=1)
+reversal_table = np.delete(np.delete(reversal_table, 0, axis=0), 0, axis=1)
 
 char2idx = dict((char, ord(char) - ord('a')) for char in alphabet)
 char2idx[''] = 26
@@ -32,7 +32,7 @@ def Sub(x, y):
     return substitution_table[char2idx[x],char2idx[y]]
 
 def Rev(x, y):
-    return transposition_table[char2idx[x],char2idx[y]]
+    return reversal_table[char2idx[x],char2idx[y]]
 
 all_words_file = ['/home/yao/Downloads/NLP/spell_correction/english.0', 
                   '/home/yao/Downloads/NLP/spell_correction/english.1', 
