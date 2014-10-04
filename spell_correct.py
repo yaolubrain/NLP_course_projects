@@ -86,7 +86,7 @@ def Substitutions(word):
 
 def Reversals(word):
     splits  = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    reversals = [(a+b[1]+b[0]+b[2:], Prob(a+b[1]+b[0]+b[2:], b[0], b[1]), 'reversal') 
+    reversals = [(a+b[1]+b[0]+b[2:], Prob(a+b[1]+b[0]+b[2:], b[0], b[1], 'reversal')) 
                  for a, b in splits if len(b)>1 and a+b[1]+b[0]+b[2:] in all_words]
     return reversals
 
@@ -98,4 +98,5 @@ def Correct(word):
                     
 if __name__ == "__main__":
     print Correct('sted')                    
+
     
