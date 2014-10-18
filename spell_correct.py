@@ -1,3 +1,5 @@
+# The confusion matrices can be downloaded in http://comp.mq.edu.au/units/comp348/ConfusionTables.zip
+
 import numpy as np
 import string, glob
 from collections import Counter
