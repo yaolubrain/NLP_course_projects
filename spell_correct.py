@@ -34,21 +34,22 @@ def Sub(x, y):
 def Rev(x, y):
     return reversal_table[char2idx[x],char2idx[y]]
 
-all_words_file = ['/home/yao/Downloads/NLP/spell_correction/english.0', 
-                  '/home/yao/Downloads/NLP/spell_correction/english.1', 
-                  '/home/yao/Downloads/NLP/spell_correction/english.2', 
+all_words_file = ['/home/yao/Downloads/NLP/spell_correction/english.0',
+                  '/home/yao/Downloads/NLP/spell_correction/english.1',
+                  '/home/yao/Downloads/NLP/spell_correction/english.2',
                   '/home/yao/Downloads/NLP/spell_correction/english.3']
 all_words = []
 for file in all_words_file:
     with open(file) as f:
         words = f.read().split()
         all_words += ([w.split('/')[0] for w in words])
-        
+
 all_words = set(all_words)
 
+
 all_words_join = ' '.join(all_words)
-chars_x  = dict((x, all_words_join.count(x)) for x in alphabet) 
-chars_xy = dict((x+y, all_words_join.count(x+y)) for x in alphabet for y in alphabet) 
+chars_x  = dict((x, all_words_join.count(x)) for x in alphabet)
+chars_xy = dict((x+y, all_words_join.count(x+y)) for x in alphabet for y in alphabet)
 chars = dict(chars_x.items() + chars_xy.items())
 
 freq = Counter()
@@ -68,35 +69,32 @@ def Prob(word, x, y, trans):
 
 def Deletions(word):
     splits  = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    deletes = [(a+b[1:], Prob(a+b[1:], a[-1], b[0], 'deletion')) 
+    deletes = [(a+b[1:], Prob(a+b[1:], a[-1], b[0], 'deletion'))
                for a, b in splits if b and a+b[i:] in all_words]
     return deletes
 
 def Insertions(word):
     splits  = [(word[:i], word[i:]) for i in range(len(word) + 1)]
     inserts = [(a+c+b, Prob(a+c+b, a[-1], c, 'insertion'))
-               for a, b in splits for c in alphabet if a+c+b in all_words] 
+               for a, b in splits for c in alphabet if a+c+b in all_words]
     return inserts
-    
+
 def Substitutions(word):
     splits  = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    substitutes = [(a+c+b[1:], Prob(a+c+b[1:], b[0], c, 'substitution')) 
+    substitutes = [(a+c+b[1:], Prob(a+c+b[1:], b[0], c, 'substitution'))
                    for a, b in splits for c in alphabet if b and a+c+b[1:] in all_words]
     return substitutes
 
 def Reversals(word):
     splits  = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    reversals = [(a+b[1]+b[0]+b[2:], Prob(a+b[1]+b[0]+b[2:], b[0], b[1], 'reversal')) 
+    reversals = [(a+b[1]+b[0]+b[2:], Prob(a+b[1]+b[0]+b[2:], b[0], b[1], 'reversal'))
                  for a, b in splits if len(b)>1 and a+b[1]+b[0]+b[2:] in all_words]
     return reversals
 
 def Correct(word):
-    corrections = Deletions(word) + Insertions(word) + Substitutions(word) + Reversals(word)    
+    corrections = Deletions(word) + Insertions(word) + Substitutions(word) + Reversals(word)
     return sorted(corrections, key=lambda x: x[1], reverse=True)
 
-                    
-                    
 if __name__ == "__main__":
-    print Correct('sted')                    
+    print Correct('sted')
 
-    
