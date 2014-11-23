@@ -22,6 +22,24 @@ reversal_table = np.delete(np.delete(reversal_table, 0, axis=0), 0, axis=1)
 char2idx = dict((char, ord(char) - ord('a')) for char in alphabet)
 char2idx[''] = 26
 
+def smooth(X):
+    unique, counts = np.unique(X, return_counts=True)
+    freq = dict(zip(unique, counts)) 
+    Y = np.zeros_like(X) 
+    for i in xrange(X.shape[0]):
+        for j in xrange(X.shape[1]):
+            if X[i,j]+1 in freq:
+                Y[i,j] = (X[i,j]+1)*freq[X[i,j]+1] / freq[X[i,j]] 
+            else:
+                Y[i,j] = 0
+    return Y
+
+deletion_table = smooth(deletion_table)
+insertion_table = smooth(insertion_table)
+substitution_table = smooth(substitution_table)
+reversal_table = smooth(reversal_table)
+
+
 def Del(x, y):
     return deletion_table[char2idx[x],char2idx[y]]
 
@@ -33,6 +51,7 @@ def Sub(x, y):
 
 def Rev(x, y):
     return reversal_table[char2idx[x],char2idx[y]]
+
 
 all_words_file = ['/home/yao/Downloads/NLP/spell_correction/english.0',
                   '/home/yao/Downloads/NLP/spell_correction/english.1',
